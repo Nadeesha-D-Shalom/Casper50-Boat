@@ -1,14 +1,34 @@
-// Define the LED pin (on most ESP32 boards, it's GPIO 2)
-#define LED_PIN 2
+#include <SPI.h>
+#include <LoRa.h>
 
 void setup() {
-  // Initialize the digital pin as an output.
-  pinMode(LED_PIN, OUTPUT);
+  Serial.begin(115200);
+  delay(2000);
+  setupLoRa();
 }
 
 void loop() {
-  digitalWrite(LED_PIN, HIGH);   // Turn the LED on
-  delay(1000);                   // Wait for 1 second
-  digitalWrite(LED_PIN, LOW);    // Turn the LED off
-  delay(1000);                   // Wait for 1 second
+  receiveLoRaPacket();
+}
+
+void setupLoRa() {
+  Serial.println("Starting LoRa Receiver...");
+  LoRa.setPins(5, 14, 2);
+  if (!LoRa.begin(433E6)) {
+    Serial.println("LoRa init failed. Check wiring.");
+    while (true);
+  }
+  Serial.println("LoRa Receiver is ready.");
+}
+
+void receiveLoRaPacket() {
+  int packetSize = LoRa.parsePacket();
+  if (packetSize) {
+    Serial.print("Received packet: ");
+    while (LoRa.available()) {
+      String message = LoRa.readString();
+      Serial.print(message);
+    }
+    Serial.println();
+  }
 }
