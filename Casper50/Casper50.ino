@@ -18,7 +18,7 @@ void setup() {
   LoRa.setSignalBandwidth(125E3);
   LoRa.setCodingRate4(5);
 
-  Serial.println("✅ LoRa Receiver is ready.");
+  Serial.println(" LoRa Receiver is ready.");
 }
 
 void loop() {
@@ -30,12 +30,12 @@ void loop() {
       received += (char)LoRa.read();
     }
 
-    Serial.println("📥 Received: " + received);
-    Serial.print("📶 RSSI: ");
+    Serial.println(" Received: " + received);
+    Serial.print(" RSSI: ");
     Serial.print(LoRa.packetRssi());
     Serial.println(" dBm");
   } else {
-    Serial.println("⌛ Waiting for packet...");
+    Serial.println(" Waiting for packet...");
     delay(1000);
   }
 }
